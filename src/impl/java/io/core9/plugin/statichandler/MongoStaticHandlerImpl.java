@@ -32,8 +32,13 @@ public class MongoStaticHandlerImpl implements StaticHandler {
 				String filePath = request.getPath().replaceFirst("/static", "");
 				try {
 					Map<String,Object> file = repository.getFileContentsByName(request.getVirtualHost(), filePath);
-					request.getResponse().putHeader("Content-Type", (String) file.get("ContentType"));
-					request.getResponse().sendBinary(ByteStreams.toByteArray((InputStream) file.get("stream")));
+					if(file == null){
+						request.getResponse().setStatusCode(404);
+						request.getResponse().setStatusMessage("File not found");
+					}else{
+						request.getResponse().putHeader("Content-Type", (String) file.get("ContentType"));
+						request.getResponse().sendBinary(ByteStreams.toByteArray((InputStream) file.get("stream")));						
+					}
 				} catch (IOException e) {
 					request.getResponse().setStatusCode(404);
 					request.getResponse().setStatusMessage("File not found");
