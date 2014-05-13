@@ -1,4 +1,4 @@
 module-static-handler
 =====================
 
-Handles static content
+This module has been deprecated in favor of the module-files-manager
